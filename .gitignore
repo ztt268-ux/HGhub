@@ -1,0 +1,33 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物
+dist/
+dist-ssr/
+test-results/
+src-tauri/target/
+src-tauri/gen/
+*.local
+
+# 编辑器 / 系统
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# 签名与密钥（务必不要提交）
+*.keystore
+*.jks
+*.p12
+*.pem
+.env
+.env.*
+
+# API
+docs/API.md
+
+# Agent instructions (local)
+AGENTS.md

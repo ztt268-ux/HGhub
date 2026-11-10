@@ -1,0 +1,558 @@
+@import "tailwindcss";
+
+/* ===================================================================
+   与设计稿一致的 Fluent 色板：深色默认，浅色 html.theme-light
+   =================================================================== */
+:root {
+  color-scheme: dark;
+  --p-canvas: #1a1a1a;
+  --p-bg: #202020;
+  --p-s1: #272727;
+  --p-s2: #2c2c2c;
+  --p-s3: #343434;
+  --p-s4: #3e3e3e;
+  --p-on: #ffffff;
+  --p-mut: #c5c5c5;
+  --p-dim: #8b8b8b;
+  --p-primary: #60cdff;
+  --p-on-primary: #003042;
+  --p-pc: #1f5a78;
+  --p-on-pc: #cdefff;
+  --p-sec: #383838;
+  --p-on-sec: #ffffff;
+  --p-like: #ff6f8c;
+  --p-star: #e8c250;
+  --p-success: #6ccb5f;
+  --p-danger: #ff99a4;
+  --p-on-danger: #45060f;
+  --p-glow: rgba(96, 205, 255, .28);
+  --p-hover: rgba(255, 255, 255, .08);
+  --p-tint: rgba(96, 205, 255, .14);
+  --p-shadow: 0 28px 88px rgba(0, 0, 0, .45), 0 6px 20px rgba(0, 0, 0, .32);
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-ctl: 999px;
+  --nav-h: 64px;
+}
+.plat-windows { --r-sm: 4px; --r-md: 8px; --r-lg: 8px; --r-ctl: 4px; --nav-h: 0px; }
+.plat-macos { --r-sm: 6px; --r-md: 10px; --r-lg: 12px; --r-ctl: 6px; --nav-h: 0px; }
+.plat-ios { --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-ctl: 999px; -webkit-touch-callout: none; }
+html.theme-light {
+  color-scheme: light;
+  --p-canvas: #f3f3f3;
+  --p-bg: #f9f9f9;
+  --p-s1: #ffffff;
+  --p-s2: #f3f3f3;
+  --p-s3: #e8e8e8;
+  --p-s4: #dcdcdc;
+  --p-on: #1a1a1a;
+  --p-mut: #5c5c5c;
+  --p-dim: #8a8a8a;
+  --p-primary: #0067c0;
+  --p-on-primary: #ffffff;
+  --p-pc: #cce4f7;
+  --p-on-pc: #003a66;
+  --p-sec: #e5e5e5;
+  --p-on-sec: #1a1a1a;
+  --p-like: #e74856;
+  --p-star: #9a6b00;
+  --p-success: #0f7b0f;
+  --p-danger: #c42b1c;
+  --p-on-danger: #ffffff;
+  --p-glow: rgba(0, 103, 192, .2);
+  --p-hover: rgba(0, 0, 0, .05);
+  --p-tint: rgba(0, 103, 192, .12);
+  --p-shadow: 0 18px 48px rgba(0, 0, 0, .14), 0 2px 8px rgba(0, 0, 0, .06);
+}
+
+@theme inline {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "Roboto", "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  --color-canvas: var(--p-canvas);
+  --color-bg: var(--p-bg);
+  --color-s1: var(--p-s1);
+  --color-s2: var(--p-s2);
+  --color-s3: var(--p-s3);
+  --color-s4: var(--p-s4);
+  --color-on: var(--p-on);
+  --color-mut: var(--p-mut);
+  --color-dim: var(--p-dim);
+  --color-primary: var(--p-primary);
+  --color-on-primary: var(--p-on-primary);
+  --color-pc: var(--p-pc);
+  --color-on-pc: var(--p-on-pc);
+  --color-sec: var(--p-sec);
+  --color-on-sec: var(--p-on-sec);
+  --color-neon: var(--p-like);
+  --color-cyan: var(--p-primary);
+  --color-violet: var(--p-pc);
+  --color-amber: var(--p-star);
+  --color-mint: var(--p-success);
+  --color-blue: var(--p-primary);
+  --color-danger: var(--p-danger);
+  --color-on-danger: var(--p-on-danger);
+}
+
+html, body, #root { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body {
+  margin: 0;
+  background: var(--p-canvas);
+  color: var(--p-on);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+input, textarea { user-select: text; }
+img, video { -webkit-user-drag: none; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ——— 原生质感滚动条 ——— */
+.scroll-y { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--p-s4) transparent; }
+.scroll-x { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+.scroll-x::-webkit-scrollbar { display: none; }
+.scroll-y::-webkit-scrollbar { width: 5px; }
+.scroll-y::-webkit-scrollbar-track { background: transparent; }
+.scroll-y::-webkit-scrollbar-thumb { background: var(--p-s4); border-radius: 99px; }
+.scroll-y::-webkit-scrollbar-thumb:hover { background: var(--p-dim); }
+.no-bar { scrollbar-width: none; }
+.no-bar::-webkit-scrollbar { display: none; }
+
+/* ——— 层级阴影（无线条分割） ——— */
+.elev-1 { box-shadow: 0 1px 2px rgba(0,0,0,.16), 0 4px 12px rgba(0,0,0,.1); }
+.elev-2 { box-shadow: 0 2px 6px rgba(0,0,0,.16), 0 10px 24px rgba(0,0,0,.12); }
+.elev-3 { box-shadow: 0 8px 28px rgba(0,0,0,.18); }
+.elev-up { box-shadow: 0 -4px 16px rgba(0,0,0,.12); }
+html.theme-light .elev-1 { box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 12px rgba(0,0,0,.04); }
+html.theme-light .elev-2 { box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+html.theme-light .elev-3 { box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+.glow-neon, .glow-cyan { box-shadow: 0 4px 18px var(--p-glow); }
+.tsh { text-shadow: 0 1px 10px rgba(0,0,0,.6); }
+.pressable { transition: transform .16s cubic-bezier(.2,0,0,1), opacity .16s, background-color .16s, color .16s; }
+.pressable:active { transform: scale(.94); }
+
+.clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.brand-grad { background: var(--p-primary); color: var(--p-on-primary); }
+.brand-text { color: var(--p-primary); }
+.tonal { background: var(--p-sec); color: var(--p-on-sec); }
+
+/* ——— 动画 ——— */
+@keyframes kf-pop { 0%{transform:scale(1)} 35%{transform:scale(1.4)} 60%{transform:scale(.94)} 100%{transform:scale(1)} }
+.a-pop { animation: kf-pop .42s cubic-bezier(.34,1.56,.64,1); }
+@keyframes kf-fade { from{opacity:0} to{opacity:1} }
+.a-fade { animation: kf-fade .2s ease both; }
+@keyframes kf-rise { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.a-rise { animation: kf-rise .38s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-sheet { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.a-sheet { animation: kf-sheet .32s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-sheet-out { from{transform:translateY(0)} to{transform:translateY(100%)} }
+.a-sheet-out { animation: kf-sheet-out .2s cubic-bezier(.3,0,.8,.15) both; }
+@keyframes kf-panel-in { from{transform:translateX(100%)} to{transform:translateX(0)} }
+.a-panel-in { animation: kf-panel-in .28s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-panel-out { from{transform:translateX(0)} to{transform:translateX(100%)} }
+.a-panel-out { animation: kf-panel-out .2s ease-in both; }
+@keyframes kf-scale-in { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
+.a-scale-in { animation: kf-scale-in .22s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-page-in { from{transform:translateX(100%)} to{transform:none} }
+.a-page-in { animation: kf-page-in .3s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-page-out { from{transform:translateX(0)} to{transform:translateX(100%)} }
+.a-page-out { animation: kf-page-out .22s cubic-bezier(.3,0,.8,.15) both; }
+@keyframes kf-shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+.shimmer { background: linear-gradient(90deg, var(--p-s1) 25%, var(--p-s3) 50%, var(--p-s1) 75%); background-size: 800px 100%; animation: kf-shimmer 1.4s linear infinite; }
+@keyframes kf-spin { to{transform:rotate(360deg)} }
+.a-spin-slow { animation: kf-spin 6s linear infinite; }
+@keyframes kf-toast { from{opacity:0;transform:translateY(12px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+.a-toast { animation: kf-toast .26s cubic-bezier(.2,0,0,1) both; }
+@keyframes kf-kenburns { 0%{transform:scale(1.02) translateY(0)} 50%{transform:scale(1.12) translateY(-2%)} 100%{transform:scale(1.02) translateY(0)} }
+.a-kenburns { animation: kf-kenburns 18s ease-in-out infinite; }
+.spinner { border: 3px solid rgba(255,255,255,.18); border-top-color: var(--p-primary); border-radius: 999px; animation: kf-spin .8s linear infinite; }
+
+/* ——— 进度滑杆 ——— */
+input[type="range"].hg-range { -webkit-appearance: none; appearance: none; height: 20px; background: transparent; cursor: pointer; }
+input[type="range"].hg-range::-webkit-slider-runnable-track { height: 4px; border-radius: 99px; background: linear-gradient(to right, var(--p-primary) var(--fill,0%), rgba(255,255,255,.22) var(--fill,0%)); }
+input[type="range"].hg-range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 99px; background: #fff; box-shadow: 0 0 10px var(--p-glow); }
+
+/* ——— Windows 无边框窗口 ——— */
+.win-root { background: var(--p-canvas); }
+/* height 改动时同步 src-tauri/src/macos_titlebar.rs 的 TITLEBAR_HEIGHT（macOS 红绿灯据此垂直居中） */
+.win-titlebar {
+  height: 44px; display: flex; align-items: center; gap: 6px; padding: 0 8px 0 14px;
+  background: var(--p-bg); user-select: none;
+}
+.win-wordmark { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--p-on); letter-spacing: .2px; }
+.win-wordmark-light { font-weight: 400; color: var(--p-mut); }
+.win-drag-region { flex: 1; height: 100%; }
+.win-caption-tool {
+  width: 34px; height: 30px; border: 0; background: transparent; border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center; color: var(--p-mut);
+}
+.win-caption-tool:hover { background: var(--p-hover); color: var(--p-on); }
+.win-caption-buttons { display: flex; align-items: center; margin-left: 4px; }
+.win-caption-buttons button {
+  width: 44px; height: 30px; border: 0; background: transparent; color: var(--p-mut);
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 0;
+}
+.win-caption-buttons button:hover { background: var(--p-hover); color: var(--p-on); }
+.win-caption-buttons .win-close:hover { background: #c42b1c; color: #fff; }
+
+.win-sidebar { width: 236px; flex: none; background: var(--p-bg); display: flex; flex-direction: column; }
+.win-sidebar.is-compact { width: 72px; }
+.win-sidebar-inner { display: flex; flex-direction: column; gap: 6px; padding: 10px 10px 14px; height: 100%; }
+.win-search-launch {
+  display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0;
+  background: var(--p-s2); color: var(--p-mut); border-radius: var(--r-md); font-size: 13px;
+}
+.win-search-launch:hover { background: var(--p-s3); color: var(--p-on); }
+.win-search-launch.is-selected { background: var(--p-s3); color: var(--p-on); }
+.win-nav-items { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.win-nav-item {
+  display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; border: 0;
+  background: transparent; color: var(--p-mut); border-radius: var(--r-md); font-size: 13px; position: relative;
+}
+.win-nav-item:hover { background: var(--p-hover); color: var(--p-on); }
+.win-nav-item.is-selected { background: var(--p-s3); color: var(--p-on); font-weight: 600; }
+.win-nav-item.is-selected::before {
+  content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 3px;
+  border-radius: 2px; background: var(--p-primary);
+}
+.win-nav-copy { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.win-nav-key {
+  font-size: 10px; color: var(--p-dim); background: var(--p-s2); border-radius: 4px;
+  padding: 1px 5px; font-family: inherit;
+}
+.win-sidebar.is-compact .win-nav-copy,
+.win-sidebar.is-compact .win-nav-key,
+.win-sidebar.is-compact .win-account-copy,
+.win-sidebar.is-compact .win-sidebar-version { display: none; }
+.win-sidebar.is-compact .win-nav-item,
+.win-sidebar.is-compact .win-search-launch { justify-content: center; padding: 0; }
+.win-sidebar-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+.win-account {
+  display: flex; align-items: center; gap: 10px; padding: 8px; border: 0; background: transparent;
+  border-radius: var(--r-md); text-align: left;
+}
+.win-account:hover { background: var(--p-hover); }
+.win-account-copy { display: flex; flex-direction: column; min-width: 0; }
+.win-account-copy strong { font-size: 12.5px; color: var(--p-on); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.win-account-copy small { font-size: 10.5px; color: var(--p-dim); }
+.win-sidebar-version { font-size: 10px; color: var(--p-dim); padding: 2px 10px 0; }
+
+/* 仅桌面窗口（Windows 无边框 / macOS Overlay）：右侧/底部留 12px 呼吸位 + 圆角。
+   安卓必须不加，否则内容比屏幕小一圈（右侧、底部各 12px 露 canvas 底）。 */
+.plat-windows .win-main,
+.plat-macos .win-main {
+  margin: 0 12px 12px 0;
+  border-radius: 13px;
+  background: var(--p-bg);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* macOS：titleBarStyle Overlay，标题栏左侧要让出系统红绿灯。
+   原生全屏时红绿灯被系统隐藏（is-native-fs），让位收回，避免留一条空白。 */
+.plat-macos .win-titlebar { padding-left: 84px; }
+.plat-macos .win-titlebar.is-native-fs { padding-left: 14px; }
+.plat-android .win-main,
+.plat-ios .win-main { background: var(--p-bg); overflow: hidden; }
+.win-page-in { animation: kf-page-in .26s cubic-bezier(.2,0,0,1) both; }
+.win-page-out { animation: kf-page-out .2s ease-in both; }
+
+/* 桌面端首页悬浮分段控件 */
+.desktop-home-tabs {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 2px; padding: 3px; background: rgba(0,0,0,.42);
+  border-radius: var(--r-ctl); backdrop-filter: blur(18px); z-index: 25;
+}
+.desktop-home-tabs button {
+  border: 0; background: transparent; color: rgba(255,255,255,.62);
+  font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: var(--r-ctl);
+}
+.desktop-home-tabs button[aria-selected="true"] { background: rgba(255,255,255,.16); color: #fff; }
+
+/* ——— 无边框窗口边缘缩放热区 ——— */
+.win-resize { position: absolute; z-index: 60; }
+.win-resize-n { top: 0; left: 8px; right: 8px; height: 5px; cursor: ns-resize; }
+.win-resize-s { bottom: 0; left: 8px; right: 8px; height: 5px; cursor: ns-resize; }
+.win-resize-w { left: 0; top: 8px; bottom: 8px; width: 5px; cursor: ew-resize; }
+.win-resize-e { right: 0; top: 8px; bottom: 8px; width: 5px; cursor: ew-resize; }
+.win-resize-nw { left: 0; top: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+.win-resize-ne { right: 0; top: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.win-resize-sw { left: 0; bottom: 0; width: 10px; height: 10px; cursor: nesw-resize; }
+.win-resize-se { right: 0; bottom: 0; width: 10px; height: 10px; cursor: nwse-resize; }
+/* ===================================================================
+   桌面沉浸式播放器（对齐设计稿 windows.css）
+   =================================================================== */
+.desktop-context-header {
+  position: absolute; top: 18px; left: 20px; right: 20px; z-index: 20;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12.5px; color: #e8ecf2;
+}
+.desktop-context-header > button {
+  width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: 50%; background: rgba(255,255,255,.06); color: #e8ecf2;
+  transition: background .16s, transform .16s;
+}
+.desktop-context-header > button:hover { background: rgba(255,255,255,.14); }
+.desktop-context-header > button:active { transform: scale(.92); }
+.desktop-context-header > span {
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 70%;
+  font-weight: 600; text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
+.desktop-context-header > small {
+  margin-left: auto; font-size: 11px; color: #9aa0aa;
+  font-variant-numeric: tabular-nums;
+}
+
+.desktop-video-meta {
+  position: absolute; left: 26px; right: 108px; bottom: 84px; z-index: 10;
+  max-width: 620px; pointer-events: none;
+}
+.desktop-video-meta > * { pointer-events: auto; }
+
+.desktop-social {
+  position: absolute; right: 22px; bottom: 92px; z-index: 20;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.desktop-social button {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 46px; color: #e3e6ec;
+  transition: color .18s, transform .18s;
+}
+.desktop-social button:hover { color: #fff; transform: translateY(-2px); }
+.desktop-social button:active { transform: scale(.9); }
+.desktop-social button > span:last-child {
+  font-size: 10px; font-weight: 600; color: #b1b7c2; font-variant-numeric: tabular-nums;
+}
+
+.desktop-browse-inline {
+  display: flex; flex-direction: column; gap: 9px; align-items: center;
+  padding-bottom: 14px; margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+.desktop-browse-inline button {
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
+  background: rgba(255,255,255,.06); color: #cdd3dd;
+  transition: background .16s, transform .16s, color .16s;
+}
+.desktop-browse-inline button:hover:not(:disabled) { background: rgba(255,255,255,.15); transform: scale(1.06); }
+.desktop-browse-inline button:active:not(:disabled) { transform: scale(.94); }
+.desktop-browse-inline button:disabled { color: #5e6570; background: rgba(255,255,255,.02); cursor: default; }
+.desktop-browse-inline small { color: #8b929d; font-size: 9.5px; font-variant-numeric: tabular-nums; letter-spacing: .3px; }
+.desktop-browse button {
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
+  background: rgba(255,255,255,.05); color: #cdd3dd;
+  transition: background .16s, transform .16s, color .16s;
+}
+.desktop-browse button:hover:not(:disabled) { background: rgba(255,255,255,.13); transform: scale(1.06); }
+.desktop-browse button:disabled { color: #5e6570; background: rgba(255,255,255,.02); cursor: default; }
+.desktop-browse small { color: #777f8c; font-size: 9px; font-variant-numeric: tabular-nums; }
+
+/* —— 控制条 —— */
+.desktop-controls {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 25;
+  padding: 0 22px 10px; color: #bcc3cd;
+  background: linear-gradient(0deg, rgba(6,9,13,.82), rgba(6,9,13,.28) 62%, transparent);
+  transition: opacity .25s;
+}
+.desktop-controls.is-hidden { opacity: 0; pointer-events: none; }
+.playback-unlock { color: rgba(255,255,255,.38); background: rgba(0,0,0,.12); transition: color .2s, background .2s; }
+.playback-unlock:hover, .playback-unlock:focus-visible { color: rgba(255,255,255,.9); background: rgba(0,0,0,.4); }
+.player-root.is-locked [inert] button,
+.player-root.is-locked .desktop-controls,
+.player-root.is-locked .desktop-video-meta,
+.player-root.is-locked .desktop-social { visibility: hidden; }
+.desktop-control-row { display: flex; align-items: center; gap: 5px; height: 38px; }
+.player-control {
+  height: 32px; min-width: 32px; padding: 0 8px; border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #c8ced8; transition: background .16s, color .16s, transform .16s;
+}
+.player-control:hover { background: rgba(255,255,255,.09); color: #fff; }
+.player-control:active { transform: scale(.94); }
+.player-control:disabled { color: #5e6570; cursor: default; }
+.player-control.is-on { color: var(--p-primary); }
+.player-control.primary-play { color: #fff; }
+.player-control.primary-play svg { fill: currentColor; }
+.player-timecode {
+  display: inline-flex; gap: 4px; align-items: baseline;
+  font-size: 11.5px; font-variant-numeric: tabular-nums; color: #d3dae4; margin-left: 6px;
+}
+.player-time-separator { color: #6b7480; }
+.player-control-spacer { flex: 1; }
+.player-resolution { font-size: 10.5px; color: #8b93a0; padding: 0 6px; }
+.player-speed-slot { position: relative; }
+.player-speed { font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.player-speed-menu {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  width: 132px; padding: 6px; border-radius: 10px;
+  background: rgba(37,42,49,.98); box-shadow: 0 12px 42px rgba(0,0,0,.5);
+  display: flex; flex-direction: column; gap: 1px; animation: kf-scale-in .18s ease both;
+}
+.player-menu-title { font-size: 10px; color: #78828f; padding: 6px 8px 8px; }
+.player-speed-menu button {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 30px; padding: 0 8px; border-radius: 6px;
+  font-size: 12px; color: #c9d1dc;
+}
+.player-speed-menu button:hover { background: rgba(255,255,255,.07); color: #fff; }
+.player-speed-menu button[aria-checked="true"] { color: var(--p-primary); }
+.player-volume { display: flex; align-items: center; }
+.player-volume-slider { width: 0; overflow: hidden; transition: width .2s ease; display: flex; align-items: center; }
+.player-volume:hover .player-volume-slider,
+.player-volume:focus-within .player-volume-slider { width: 74px; }
+.player-volume-slider input {
+  -webkit-appearance: none; appearance: none; display: block; width: 68px; height: 20px;
+  background: transparent; margin: 0 3px; cursor: pointer;
+}
+/* 轨道单独画：滑块才和轨道同轴，不会上下错位 */
+.player-volume-slider input::-webkit-slider-runnable-track {
+  height: 3px; border-radius: 99px;
+  background: linear-gradient(to right, var(--p-primary) var(--fill,70%), rgba(255,255,255,.2) var(--fill,70%));
+}
+.player-volume-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%; background: #fff;
+  margin-top: -3.5px; box-shadow: 0 1px 3px rgba(0,0,0,.45);
+}
+.player-volume-slider input::-moz-range-track {
+  height: 3px; border-radius: 99px; background: rgba(255,255,255,.2);
+}
+.player-volume-slider input::-moz-range-progress {
+  height: 3px; border-radius: 99px; background: var(--p-primary);
+}
+.player-volume-slider input::-moz-range-thumb {
+  width: 10px; height: 10px; border: 0; border-radius: 50%; background: #fff;
+}
+
+/* —— 桌面沉浸：鼠标闲置时淡出播放器 UI（鼠标一动就回来） —— */
+.player-root .desktop-controls,
+.player-root .desktop-social,
+.player-root .desktop-video-meta,
+.player-root .desktop-browse-inline { transition: opacity .28s ease; }
+.player-root.is-idle .desktop-controls,
+.player-root.is-idle .desktop-social,
+.player-root.is-idle .desktop-video-meta,
+.player-root.is-idle .desktop-browse-inline { opacity: 0; pointer-events: none; }
+
+/* 进度条在淡出时仍保留命中区域，避免快速点击穿透到视频并触发暂停。
+   仅激活播放页启用；其他隐藏按钮继续不接收点击。 */
+.player-root.is-idle .desktop-controls .desktop-seek.is-seekable { pointer-events: auto; }
+
+/* —— 进度条 —— */
+.desktop-seek { position: relative; height: 19px; display: flex; align-items: center; cursor: pointer; }
+.desktop-seek-track {
+  pointer-events: none; position: absolute; height: 2px; inset: auto 0;
+  background: rgba(255,255,255,.16); border-radius: 2px; overflow: hidden; transition: height .16s;
+}
+.desktop-seek-buffer { position: absolute; height: 100%; background: rgba(255,255,255,.10); }
+.desktop-seek-played { position: absolute; height: 100%; background: #80bbdf; border-radius: inherit; }
+.desktop-seek:hover .desktop-seek-track, .desktop-seek:focus-within .desktop-seek-track { height: 4px; }
+.desktop-seek > input {
+  -webkit-appearance: none; appearance: none; position: absolute; inset: 0;
+  width: 100%; height: 19px; background: transparent; margin: 0; cursor: pointer; opacity: 0;
+}
+
+/* —— 右侧停靠面板 —— */
+.desktop-dock {
+  background: var(--p-s1); color: var(--p-on);
+  box-shadow: -20px 0 60px rgba(0,0,0,.5);
+  border-left: 1px solid rgba(255,255,255,.06);
+}
+
+/* —— 影院模式：隐藏侧栏阴影，内容更宽 —— */
+.is-theater .desktop-video-meta { max-width: 760px; }
+/* 影院模式：侧栏收起后，主区左侧也留出同样 12px 呼吸位 */
+.win-main.is-theater-main { margin-left: 12px; }
+
+/* —— 播放器面板：圆角 + 嵌入感 —— */
+/* 说明：WebView2 里 overflow:hidden 裁视频层不做抗锯齿，必须用 clip-path + 独立合成层 */
+.player-surface {
+  border-radius: 12px;
+  background: #15181d;
+  isolation: isolate;
+  overflow: hidden;
+  clip-path: inset(0 round 12px);
+  transform: translateZ(0);
+  will-change: clip-path;
+}
+.player-surface video {
+  border-radius: 12px;
+  transform: translateZ(0);
+}
+.player-surface::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 30;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.055);
+}
+.player-surface .player-root,
+.player-root { background: #15181d; }
+
+/* —— 移动端沉浸全屏：固定铺满全屏视口，脱离外层滚动容器 scrollTop 影响 —— */
+.fs-immersive {
+  position: fixed;
+  inset: 0;
+  width: 100vw; height: 100vh;
+  width: 100dvw; height: 100dvh;
+  z-index: 45;
+  background: #000;
+  overflow: hidden;
+}
+
+/* —— 移动端沉浸全屏（系统仍处于竖屏时的 CSS 90° 旋转兜底） —— */
+.fs-landscape {
+  position: fixed;
+  top: 50%; left: 50%; right: auto; bottom: auto;
+  width: 100vh; height: 100vw;
+  width: 100dvh; height: 100dvw;
+  transform: translate(-50%, -50%) rotate(90deg);
+  transform-origin: center center;
+  z-index: 45;
+  background: #000;
+  overflow: hidden;
+}
+
+.desktop-dock-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 0; z-index: 40;
+  background: var(--p-s1); overflow: hidden;
+  transition: width .3s cubic-bezier(.2,0,0,1);
+  border-left: 1px solid rgba(255,255,255,.05);
+}
+.desktop-dock-panel.is-open { width: 372px; box-shadow: -14px 0 40px rgba(0,0,0,.35); }
+
+.desktop-dock-inner { width: 372px; height: 100%; display: flex; flex-direction: column; }
+/* —— 吃瓜图文正文 —— */
+.article-body { font-size: 13px; line-height: 1.85; color: rgba(240,242,246,.84); word-break: break-word; }
+.article-body p { margin: 9px 0; }
+.article-body img { display: block; width: 100%; border-radius: 10px; margin: 10px 0; }
+.article-body a { color: var(--p-primary); text-decoration: underline; }
+.article-body h1, .article-body h2, .article-body h3 { font-size: 14.5px; font-weight: 700; margin: 14px 0 6px; color: var(--p-on); }
+.article-body ul, .article-body ol { padding-left: 18px; margin: 8px 0; }
+.article-body li { margin: 4px 0; }
+.article-body blockquote { margin: 10px 0; padding: 8px 12px; border-left: 3px solid var(--p-primary); background: rgba(255,255,255,.04); border-radius: 6px; }
+html.theme-light .article-body { color: rgba(20,24,30,.82); }
+
+/* ===================================================================
+   视频浮层 / 移动端底栏：固定「亮字压暗底」
+   —— 这些元素压在视频画面上，颜色不能跟主题走。
+   浅色主题下 --p-on 是近黑色，若文字用主题色（或依赖 /透明度 工具类
+   失效回退成继承色），整排文字会直接「消失」在画面里。
+   这里用不受主题影响的显式色，并显式给出 rgba 底色（不依赖 color-mix）。
+   =================================================================== */
+.hg-ink   { color: #fff; }
+.hg-ink-2 { color: rgba(255, 255, 255, .92); }
+.hg-ink-3 { color: rgba(255, 255, 255, .78); }
+.hg-ink-4 { color: rgba(255, 255, 255, .6); }
+.hg-gold  { color: #f3c969; }
+.hg-link  { color: #8fd0ff; }
+.hg-chip         { background: rgba(0, 0, 0, .45); color: #fff; }
+.hg-chip-strong  { background: rgba(0, 0, 0, .62); color: #fff; }
+.hg-chip:active  { background: rgba(0, 0, 0, .62); }
+.hg-ov-shadow    { text-shadow: 0 1px 8px rgba(0, 0, 0, .7); }
+
+/* 安卓 WebView 点按会留下系统黄色焦点框，视频/底栏这类沉浸按钮一律去掉 */
+.hg-tabbar button,
+.hg-player-ui button,
+.hg-chip,
+.hg-chip-strong { outline: none; -webkit-tap-highlight-color: transparent; }
+.hg-tabbar button:focus,
+.hg-tabbar button:focus-visible,
+.hg-player-ui button:focus,
+.hg-player-ui button:focus-visible { outline: none; }

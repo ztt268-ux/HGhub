@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "huangguoai.pages.dev",
+        "api.github.com",
+        "github.com"
+      ],
+      "domain_suffix": [
+        "huangguoai.com",
+        "huangguoai.ai",
+        "drleao.cn",
+        "hzjvlo.cn",
+        "xxbgwypx.cc"
+      ]
+    }
+  ]
+}
