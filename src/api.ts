@@ -24,19 +24,21 @@ export const isMobile = isAndroid || isIos;
 
 /** 自定义协议地址随平台不同（见 tauri `register_asynchronous_uri_scheme_protocol` 文档）：
  *  Windows / Android → `http://<scheme>.localhost`
- *  macOS / iOS / Linux → `<scheme>://localhost`
- *  Rust 侧 `src-tauri/src/lib.rs` 里改写 m3u8 用的 scheme 必须与此一致。 */
+ *  macOS / Linux → `<scheme>://localhost`
+ *  封面仍走这条协议。iOS 视频不走它，见 `PLAYBACK`。 */
 export const LOCAL = isMacos || isIos || isLinux ? "hg://localhost" : "http://hg.localhost";
+/** iOS 15 没有 MediaSource，系统播放器拒绝 `hg://`。端口与 `local_media::PORT` 一致。 */
+export const PLAYBACK = isIos ? "http://127.0.0.1:17831" : LOCAL;
 
-/** src 是否已是本地协议地址（避免在详情页把代理地址再包一层） */
-export const isLocalMedia = (src: string) => src.startsWith(`${LOCAL}/`);
+/** src 是否已是本地代理地址（避免在详情页把代理地址再包一层） */
+export const isLocalMedia = (src: string) => src.startsWith(`${LOCAL}/`) || src.startsWith(`${PLAYBACK}/`);
 
 /** 封面：经本地协议解密（站点封面是 AES 密文）。 */
 export const cover = (url?: string, _w = 480) =>
   url ? `${LOCAL}/img?u=${encodeURIComponent(url)}` : "";
 
-/** 播放列表：经本地协议改写分片地址，规避 CORS 与防盗链。 */
-export const playlist = (url: string) => `${LOCAL}/hls?u=${encodeURIComponent(url)}`;
+/** 播放列表：经本地代理改写分片地址，规避 CORS 与防盗链。 */
+export const playlist = (url: string) => `${PLAYBACK}/hls?u=${encodeURIComponent(url)}`;
 
 /* ── 调用封装 ───────────────────────────────────────────── */
 
@@ -148,7 +150,7 @@ export async function selfTest(): Promise<string> {
   try {
     const info = await api.play(117, 3);
     steps.push(`play:${info?.video_url ? "ok" : "empty"}`);
-    const hlsUrl = `${LOCAL}/hls?u=${encodeURIComponent(info.video_url)}`;
+    const hlsUrl = playlist(info.video_url);
     const r1 = await fetch(hlsUrl);
     const txt = await r1.text();
     steps.push(`hls:${r1.status}/${txt.length}/${txt.startsWith("#EXTM3U") ? "m3u8" : "bad"}`);
@@ -213,7 +215,7 @@ export const dur = (s?: number | string) => {
 
 /** 非 m3u8 媒体（mp4 等）走 /seg 原样透传 */
 export function directMedia(url: string): string {
-  return `${LOCAL}/seg?u=${encodeURIComponent(url)}`;
+  return `${PLAYBACK}/seg?u=${encodeURIComponent(url)}`;
 }
 
 /** 按扩展名选择代理方式：m3u8 → 播放列表改写；其它 → 原样透传 */

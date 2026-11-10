@@ -1,5 +1,6 @@
 mod api;
 mod lines;
+mod local_media;
 mod logging;
 #[cfg(target_os = "macos")]
 mod macos_titlebar;
@@ -61,6 +62,9 @@ pub fn run() {
                 let state: tauri::State<Api> = app.state();
                 state.session.bind(dir);
             }
+            // iOS 系统播放器只接受 http/https。本机回环服务必须在页面加载前开始监听。
+            #[cfg(target_os = "ios")]
+            local_media::start();
             // macOS 主窗口在此创建：先按系统红绿灯尺寸算出居中位置（见 macos_titlebar.rs）
             #[cfg(target_os = "macos")]
             macos_titlebar::create_main_window(app)?;

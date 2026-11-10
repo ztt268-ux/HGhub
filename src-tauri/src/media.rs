@@ -1,8 +1,8 @@
 //! 媒体层：封面解密 + HLS 代理。
 //!
 //! 站点封面是 AES-128-CBC 密文，m3u8 内部分片/key 又可能被 WebView 的 CORS 拦住，
-//! 所以图片与视频统一走本地自定义协议（Windows/Android 为 `http://hg.localhost`，
-//! macOS 为 `hg://localhost`，见 [`LOCAL_ORIGIN`]）。
+//! 所以图片与视频统一走本地代理（Windows/Android 为 `http://hg.localhost`，
+//! macOS/Linux 为 `hg://localhost`，iOS 为 `http://127.0.0.1:17831`，见 [`LOCAL_ORIGIN`]）。
 
 use crate::net::fetch_bytes;
 use aes::cipher::{BlockDecrypt, KeyInit};
@@ -16,11 +16,14 @@ use tauri::http::{Response, StatusCode};
 /// 本平台自定义协议的完整基址。
 ///
 /// Tauri 的自定义协议地址随平台不同：Windows / Android 是 `http://<scheme>.localhost`，
-/// macOS / iOS / Linux 是 `<scheme>://localhost`。m3u8 里的分片与 key 地址按它改写。
-/// 前端 `src/api.ts` 的 `LOCAL` 必须与此一致，否则封面与视频全部加载失败。
+/// macOS / Linux 是 `<scheme>://localhost`。iOS 系统播放器不接受自定义协议，
+/// 因此播放地址使用本机回环服务，见 `local_media`。m3u8 里的分片与 key 地址按它改写。
+/// 前端 `src/api.ts` 的 `PLAYBACK` 必须与此一致，否则视频无法播放。
 #[cfg(any(target_os = "windows", target_os = "android"))]
 pub const LOCAL_ORIGIN: &str = "http://hg.localhost";
-#[cfg(not(any(target_os = "windows", target_os = "android")))]
+#[cfg(target_os = "ios")]
+pub const LOCAL_ORIGIN: &str = "http://127.0.0.1:17831";
+#[cfg(not(any(target_os = "windows", target_os = "android", target_os = "ios")))]
 pub const LOCAL_ORIGIN: &str = "hg://localhost";
 
 const IMG_KEY: &[u8] = b"f5d965df75336270";
@@ -509,6 +512,18 @@ mod tests {
 
     /// 离线回归：不再依赖带 auth_key 时效的真实上游地址（旧地址已过期，会 403）。
     /// 与真实播放列表同构：带签名的分片地址 + 加密 KEY + 相对路径分片。
+    #[test]
+    fn loopback_origin_is_rewritten_into_ios_playlists() {
+        let origin = "http://127.0.0.1:17831";
+        let body = rewrite_playlist(
+            "https://cdn.example/videos5/abc/abc.m3u8",
+            "#EXTM3U\n#EXT-X-KEY:METHOD=AES-128,URI=\"key.bin\"\nseg-1.ts\n",
+            origin,
+        );
+        assert_eq!(body.matches("http://127.0.0.1:17831/seg?u=").count(), 2);
+        assert!(!body.contains("hg://"));
+    }
+
     #[test]
     fn playlist_rewrite_works() {
         let base = "https://cdn.example/videos5/abc/abc.m3u8?auth_key=9999999999-0-0-deadbeef&v=3&via=hgdj";
