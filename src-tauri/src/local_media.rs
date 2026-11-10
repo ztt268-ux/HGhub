@@ -68,7 +68,7 @@ async fn serve(mut socket: TcpStream) -> std::io::Result<()> {
     if !matches!(method, "GET" | "HEAD" | "OPTIONS") {
         return write_response(&mut socket, 405, "text/plain", b"method not allowed", None).await;
     }
-    let range = range_header(header);
+    let range = range_header(&header);
     if method == "OPTIONS" {
         return write_response(&mut socket, 204, "text/plain", b"", None).await;
     }
